@@ -6,6 +6,7 @@ seaborn
 gdown
 fastapi
 uvicorn
+scikit-learn
 
 # Python version
 python_version >= 3.10
