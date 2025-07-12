@@ -1,0 +1,34 @@
+data:
+  data_dir: "data"
+  # data_dir: ""
+  data_url: "https://drive.google.com/file/d/1Xx4ozrFDDmzDCuIyUTxjzj43eARpxW1o/view?usp=sharing"
+  data_filename: "test-assignment-dataset.json"
+  data_cleaning:
+    columns_to_drop: ["recommendedMassFlowRate","expectedSpeedOverGround","recommendedPower","expectedCarbonIntensityIndicator",]
+    columns_nan_to_zero: ["fuelEfficiency"]
+    outlier_removal: [["shaftPower", 0, 0.999]]
+  data_preprocessing:
+    collinear_features: ["mainEngineFuelConsumed","shaftTorque", "auxEngineVolumeFlowRate", "mainEngineVolumeFlowRate",]
+    preprocessor_file: "tuning_prep.pkl"
+  target_columns: ["shaftPower", "speedOverGround"]
+feature_engineering:
+  base_angle_feature: "heading"
+  angular_features: ["windDirection","currentDirection","waveDirection","swellDirection","windWaveDirection"]
+  environment_forces_features: [["windDirection","windSpeed"],["currentDirection", "currentSpeed"]]
+  base_time_feature: "timestamp"
+hyperparameter_tuning:
+  random_search_ranges:
+    'base_estimator__learning_rate': [0.01, 0.3]  # uniform distribution within the interval, default=0.1 
+    'base_estimator__n_estimators': [50, 140] # random int within the interval, default=100 (RAM intensive)
+    'base_estimator__max_depth': [2, 13] # default=6 (RAM intensive)
+    'base_estimator__min_child_weight': [0.5, 30] # for regularization, default=1
+  random_search_file: "random_search_xgb.pkl"
+  grid_search_file: "grid_search_xgb.pkl"
+models:
+  model_dir: "models"
+  final_model_file: "final_model.pkl"
+  best_tuned_params: 
+    'learning_rate': 0.2683329083149937
+    'max_depth': 12
+    'min_child_weight': 14.5268163746471
+    'n_estimators': 125
