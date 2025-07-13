@@ -25,7 +25,8 @@ hyperparameter_tuning:
   random_search_file: "random_search_xgb.pkl"
   grid_search_file: "grid_search_xgb.pkl"
 models:
-  model_dir: "models"
+  # model_dir: "models"  # uncomment after testing
+  model_dir: "C:/Users/Peteris/Documents/CV/2025/shiprojects/hw_app/models_CLI_test"  # remove after testing
   final_model_file: "final_model.pkl"
   best_tuned_params: 
     'learning_rate': 0.2683329083149937

@@ -17,12 +17,14 @@ from sklearn.model_selection import train_test_split
 # from scripts.utils.visual import compute_correlations_matrix
 from scripts.utils.eda import top_correlations
 
-PATH_TO_MODEL = Path(r"C:\\Users\\Peteris\\Documents\\CV\\2025\\shiprojects\\hw_app\\models\\")  # remove after testing
+# PATH_TO_MODEL = Path(r"C:\\Users\\Peteris\\Documents\\CV\\2025\\shiprojects\\hw_app\\models\\")  # remove after testing
 # PATH_TO_MODEL = Path(r"C:\\Users\\pich\\Documents\\CV\\2025\\shiprojects\\hw_app\\models\\")  # remove after testing
 
 PATH_TO_DATA = Path(r"C:\\Users\\Peteris\\Documents\\CV\\2025\\shiprojects\\hw_app\\data\\")  # remove after testing
 # PATH_TO_DATA = Path(r"C:\\Users\\pich\\Documents\\CV\\2025\\shiprojects\\hw_app\\data\\")  # remove after testing
 
+
+# python main.py --tune_model from CLI ta adjust flag
 def main(tune_model:bool=False):
     """
     Run the full model pipeline: load data, preprocess, optionally tune model, train, and evaluate.
@@ -50,20 +52,16 @@ def main(tune_model:bool=False):
     # Preprocess and search for best parameters for XGBoost model.
     # (optional, uncomment if needed. Run time ~ 15h)
     if tune_model:
-        tjuuneris = HyperParamSearch(save_folder=PATH_TO_MODEL)  # remove PATH_TO_MODEL after testing
+        # tjuuneris = HyperParamSearch(save_folder=PATH_TO_MODEL)  # remove PATH_TO_MODEL after testing
+        tjuuneris = HyperParamSearch()
         tjuuneris.full_param_search(X=X_train, y=y_train, n_jobs=2)
 
-        best_tune_params = tjuuneris.grid_search_result.best_params_
-
     # Train or load model 
-        the_model, the_preprocessor = load_train_model(X=X_train, y=y_train,
-                                                        model_params=best_tune_params, # uncomment if param search conducted
-                                                        save_folder=PATH_TO_MODEL # remove PATH_TO_MODEL after testing
-                                                        )
+        the_model, the_preprocessor = tjuuneris.grid_search_result, tjuuneris.preprocess_output
     else:
         the_model, the_preprocessor = load_train_model(X=X_train, y=y_train,
                                                     #    model_params=cnfg["models"]["best_tuned_params"],  # nicely working params, remove after testing
-                                                       save_folder=PATH_TO_MODEL # remove PATH_TO_MODEL after testing
+                                                    #    save_folder=PATH_TO_MODEL # remove PATH_TO_MODEL after testing
                                                        )
     # Evaluate
     y_pred = the_model.predict(the_preprocessor.transform(X_test))

@@ -63,7 +63,6 @@ class HyperParamSearch():
         filename = preprocess_filename or cnfg["data"]["data_preprocessing"]["preprocessor_file"]
         preprocessor_path = self.folder_path / filename
         if preprocessor_path.is_file():
-            print(preprocessor_path)
             preprocess_all = joblib.load(preprocessor_path)
         else:
             preprocess_all = preproces_pipeline or Pipeline([
