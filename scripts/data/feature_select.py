@@ -32,7 +32,7 @@ class FeatureSelector(BaseEstimator, TransformerMixin):
         return self
     
 
-    def transform(self, X: pd.DataFrame, feature_to_drop:list=None)->pd.DataFrame:
+    def transform(self, X: pd.DataFrame, feature_to_drop:list[str]=None)->pd.DataFrame:
         """
         Remove specified features (columns) from the input DataFrame.
         Uses instance-level 'features_to_drop' unless an override list is provided.
@@ -43,7 +43,7 @@ class FeatureSelector(BaseEstimator, TransformerMixin):
         df_new = X.copy(deep=True)
         features = feature_to_drop or self.features_to_drop
         if features:
-            df_new = df_new.drop(columns=features)
+            df_new = df_new.drop(columns=features, errors='ignore')
             
         return df_new
     

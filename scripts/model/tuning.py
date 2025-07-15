@@ -30,13 +30,15 @@ class HyperParamSearch():
     """
 
 
-    def __init__(self, model:Path=None, save_folder:str=None):
+    def __init__(self, model:Path=None, save_folder:str=None, remove_features:list[str]=None):
         """
         Initialize the hyperparameter search with optional custom model and save directory.
         Create save directory if it does not exist.
         :param model: Custom multi-output model. Defaults to RegressorChain(XGBRegressor()).
-        :param save_folder: Path to save/load model and preprocessor files. Defaults to model 
+        :param save_folder: Path to save/load model and preprocessor files. Defaults to model
                 directory from config file.
+        :param remove_features: optional list of features to be removed during preprocessing. 
+                            If none, defaults to collinear feature list from config file.
         """
         self.model = model or RegressorChain(XGBRegressor(n_jobs=1))
         self.folder_path = save_folder or Path(__file__).parent.parent / cnfg["models"]["model_dir"] # for script
@@ -46,9 +48,10 @@ class HyperParamSearch():
         self.grid_search_result = None
         self.new_grid_params = None
         self.folder_path.mkdir(parents=True, exist_ok=True)
+        self.remove_features = remove_features
         
 
-    def preprocess(self, X, preprocess_filename:str=None, preproces_pipeline=None):
+    def preprocess(self, X, preprocess_filename:str=None, preproces_pipeline=None,):
         """
         Preprocess the input data using feature selection, feature engineering, and scaling.
         If preprocessor pipeline not provided, constructs preprocessing Pipeline with 
@@ -66,7 +69,7 @@ class HyperParamSearch():
             preprocess_all = joblib.load(preprocessor_path)
         else:
             preprocess_all = preproces_pipeline or Pipeline([
-                    ("select_features", FeatureSelector()),
+                    ("select_features", FeatureSelector(features_to_drop=self.remove_features)),
                     ("engineer_features", FeatureEngineer(drop_original_features=True,)),
                     ("scaler", StandardScaler()),
                     ])

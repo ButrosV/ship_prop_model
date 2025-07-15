@@ -42,7 +42,7 @@ def clean_data(data:pd.DataFrame, nan_col_start:str = "latitude",
         df_new[column] = df_new[column].fillna(0)
     nan_rows = df_new[df_new.loc[:, nan_col_start:nan_col_end].isnull().any(axis=1)].index
     df_new = df_new.drop(index=nan_rows)
-    df_new = df_new.drop(columns=cols_to_dorp)
+    df_new = df_new.drop(columns=cols_to_dorp, errors='ignore')
 
     df_new = df_new.drop(columns=[col for col in df_new.columns 
                                   if df_new[col].nunique(dropna=False) == 1])

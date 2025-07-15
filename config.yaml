@@ -1,6 +1,5 @@
 data:
   data_dir: "data"
-  # data_dir: ""
   data_url: "https://drive.google.com/file/d/1Xx4ozrFDDmzDCuIyUTxjzj43eARpxW1o/view?usp=sharing"
   data_filename: "test-assignment-dataset.json"
   data_cleaning:
@@ -9,6 +8,34 @@ data:
     outlier_removal: [["shaftPower", 0, 0.999]]
   data_preprocessing:
     collinear_features: ["mainEngineFuelConsumed","shaftTorque", "auxEngineVolumeFlowRate", "mainEngineVolumeFlowRate",]
+    features_to_drop_task: [
+      'latitude',
+      'longitude',
+      'draught',
+      'heading',
+      'courseOverGround',
+      'status',
+      'mainEngineVolumeFlowRate',
+      'mainEngineDensity',
+      'mainEngineTemperature',
+      'mainEngineFuelConsumed',
+      'auxEngineMassFlowRate',
+      'auxEngineVolumeFlowRate',
+      'auxEngineDensity',
+      'auxEngineTemperature',
+      'shaftSpeed',
+      'shaftTorque',
+      'specificFuelOilConsumption',
+      'timestamp',
+      'fuelEfficiency',
+      'gust',
+      'swellPeriod',
+      'wavePeriod',
+      'windWaveDirection',
+      'windWaveHeight',
+      'windWavePeriod',
+      'salinity',
+      'seaLevel']
     preprocessor_file: "tuning_prep.pkl"
   target_columns: ["shaftPower", "speedOverGround"]
 feature_engineering:

@@ -196,8 +196,7 @@ class FeatureEngineer(BaseEstimator, TransformerMixin):
         features = angular_feature or self.angular_features
 
         for angle_feature in features:
-            if angle_feature in df_direction.columns\
-                and self.base_angle_feats in df_direction.columns:
+            if angle_feature in df_direction.columns:
                 orig_feat_index = df_direction.columns.get_loc(angle_feature)
                 df_direction.insert(loc=orig_feat_index+1,
                                     column=angle_feature+'_sin',
