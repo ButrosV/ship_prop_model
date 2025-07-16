@@ -1,7 +1,10 @@
 data:
   data_dir: "data"
+  # data_dir: "C:/Users/Peteris/Documents/CV/2025/shiprojects/hw_app/data"  # remove after testing
+  # data_dir: "C:/Users/pich/Documents/CV/2025/shiprojects/hw_app/data"  # remove after testing
   data_url: "https://drive.google.com/file/d/1Xx4ozrFDDmzDCuIyUTxjzj43eARpxW1o/view?usp=sharing"
   data_filename: "test-assignment-dataset.json"
+  test_data_filename: "api_test_feature_target_pairs.json"
   data_cleaning:
     columns_to_drop: ["recommendedMassFlowRate","expectedSpeedOverGround","recommendedPower","expectedCarbonIntensityIndicator",]
     columns_nan_to_zero: ["fuelEfficiency"]
@@ -52,8 +55,9 @@ hyperparameter_tuning:
   random_search_file: "random_search_xgb.pkl"
   grid_search_file: "grid_search_xgb.pkl"
 models:
-  # model_dir: "models"  # uncomment after testing
-  model_dir: "C:/Users/Peteris/Documents/CV/2025/shiprojects/hw_app/models_CLI_test"  # remove after testing
+  model_dir: "models"  # uncomment after testing
+  # model_dir: "C:/Users/Peteris/Documents/CV/2025/shiprojects/hw_app/models_CLI_test"  # remove after testing
+  # model_dir: "C:/Users/pich/Documents/CV/2025/shiprojects/hw_app/models_CLI_test"  # remove after testing
   final_model_file: "final_model.pkl"
   best_tuned_params: 
     'learning_rate': 0.2683329083149937

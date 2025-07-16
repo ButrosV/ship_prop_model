@@ -74,6 +74,7 @@ Metrics used to compare models for model selection:
 │   ├───config.py
 │   ├───data  # Data cleaning, loading, feature prep
 │   │   ├───clean.py
+│   │   ├───split.py
 │   │   ├───feature_engineer.py
 │   │   ├───feature_select.py
 │   │   └───load.py

@@ -26,7 +26,7 @@ def get_and_load_file(
     local_file_path = data_folder / file_name
     if not Path(local_file_path).is_file():
         print(f"Source data file not in {data_folder}, downloading file")
-        gdown.download(url, local_file_path, fuzzy=True, quiet=True)
+        gdown.download(url, str(local_file_path), fuzzy=True, quiet=True)
 
     with open(local_file_path, 'r', encoding='utf-8') as f:  # more memory safe than pd.read_json(local_file_path)
         data = json.load(f)
