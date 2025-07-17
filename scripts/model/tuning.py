@@ -27,10 +27,13 @@ class HyperParamSearch():
         random_search_result (RandomizedSearchCV or None): Stores the result of the random search.
         grid_search_result (GridSearchCV or None): Stores the result of the grid search.
         new_grid_params (dict or None): Stores newly generated grid parameters from normal distribution.
+	remove_features (list or None): Stores features to be removed by FeatureSelector().
+        drop_engineer_source_features (bool or None): toogles source feature remofal by FeatureEngineer().
     """
 
 
-    def __init__(self, model:Path=None, save_folder:str=None, remove_features:list[str]=None):
+    def __init__(self, model:Path=None, save_folder:str=None, remove_features:list[str]=None,
+                 drop_engineer_source_features:bool=False):
         """
         Initialize the hyperparameter search with optional custom model and save directory.
         Create save directory if it does not exist.
@@ -39,19 +42,22 @@ class HyperParamSearch():
                 directory from config file.
         :param remove_features: optional list of features to be removed during preprocessing. 
                             If none, defaults to collinear feature list from config file.
+        :param drop_engineer_source_features: Toogle removal of source features used for feature engineering.
+                                            Default behaviour: do not drop.
         """
         self.model = model or RegressorChain(XGBRegressor(n_jobs=1))
         self.folder_path = save_folder or Path(__file__).parent.parent / cnfg["models"]["model_dir"] # for script
-        # self.folder_path = save_folder or Path.cwd() / cnfg["models"]["model_dir"]"  # for jupyter
+        self.folder_path.mkdir(parents=True, exist_ok=True)
         self.preprocess_output = None
         self.random_search_result = None
         self.grid_search_result = None
         self.new_grid_params = None
-        self.folder_path.mkdir(parents=True, exist_ok=True)
         self.remove_features = remove_features
+        self.drop_engineer_source_features = bool(drop_engineer_source_features)
         
 
-    def preprocess(self, X, preprocess_filename:str=None, preproces_pipeline=None,):
+    def preprocess(self, X, preprocess_filename:str=None, preproces_pipeline=None,
+                   drop_engineer_source_features:bool=None):
         """
         Preprocess the input data using feature selection, feature engineering, and scaling.
         If preprocessor pipeline not provided, constructs preprocessing Pipeline with 
@@ -65,12 +71,14 @@ class HyperParamSearch():
         """
         filename = preprocess_filename or cnfg["data"]["data_preprocessing"]["preprocessor_file"]
         preprocessor_path = self.folder_path / filename
+        if drop_engineer_source_features is not None:
+            self.drop_engineer_source_features = drop_engineer_source_features
         if preprocessor_path.is_file():
             preprocess_all = joblib.load(preprocessor_path)
         else:
             preprocess_all = preproces_pipeline or Pipeline([
                     ("select_features", FeatureSelector(features_to_drop=self.remove_features)),
-                    ("engineer_features", FeatureEngineer(drop_original_features=True,)),
+                    ("engineer_features", FeatureEngineer(drop_original_features=self.drop_engineer_source_features,)),
                     ("scaler", StandardScaler()),
                     ])
             preprocess_all.fit(X)

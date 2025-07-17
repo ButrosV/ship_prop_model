@@ -26,9 +26,8 @@ def main(tune_model:bool=False, task_features:bool=False):
                             original task description.
     :return: None
     """
-    # TODO: add feature drop flag=folse in train_model.py when ` --task_features ` setting is used!
     remove_features = cnfg["data"]["data_preprocessing"]["features_to_drop_task"] if task_features else None
-
+    drop_engineer_source_features = False if task_features else True
     # Load data
     df = get_and_load_file()  # add data_folder=PATH_TO_DATA when testing
 
@@ -40,7 +39,8 @@ def main(tune_model:bool=False, task_features:bool=False):
 
     # (optional, uncomment if needed. Run time ~ 15h)
     if tune_model:
-        tjuuneris = HyperParamSearch(remove_features=remove_features)
+        tjuuneris = HyperParamSearch(remove_features=remove_features,
+                                         drop_engineer_source_features=drop_engineer_source_features)
         tjuuneris.full_param_search(X=X_train, y=y_train, n_jobs=2)
 
     # Train or load model 
@@ -48,7 +48,7 @@ def main(tune_model:bool=False, task_features:bool=False):
     else:
         the_model, the_preprocessor = load_train_model(X=X_train, Y=y_train,
                                                        remove_features=remove_features,
-                                                       )
+                                                       drop_engineer_source_features=drop_engineer_source_features)
     # Evaluate
     y_pred = the_model.predict(the_preprocessor.transform(X_test))
     print(f"Shape of preprocessed training dataset = {the_preprocessor.transform(X_train).shape}.")  # remove after testing
