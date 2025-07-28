@@ -1,13 +1,9 @@
-# from pathlib import Path  # remove after testing
-# import pandas as pd   # remove after testing
 import argparse
 
 from scripts.config import cnfg
 from scripts.data.load import get_and_load_file
 from scripts.data.clean import clean_data
 from scripts.data.split import split_dataset
-# from scripts.data.feature_select import FeatureSelector
-# from scripts.data.feature_engineer import FeatureEngineer
 from scripts.model.evaluation import evaluation_tabel
 from scripts.model.tuning import HyperParamSearch
 from scripts.model.get_model import load_train_model
@@ -51,9 +47,6 @@ def main(tune_model:bool=False, task_features:bool=False):
                                                        drop_engineer_source_features=drop_engineer_source_features)
     # Evaluate
     y_pred = the_model.predict(the_preprocessor.transform(X_test))
-    print(f"Shape of preprocessed training dataset = {the_preprocessor.transform(X_train).shape}.")  # remove after testing
-    print(f"Features after selection = {the_preprocessor.named_steps["select_features"].transform(X_train).columns}.")  # remove after testing
-    print(f"Features after engineering = {the_preprocessor["engineer_features"].feature_names_out_}.")  # remove after testing
     print(f"\nEvaluation table for XGBoost model with random->Grid hyperparameter search.")
     print(evaluation_tabel(
         predictions=y_pred,

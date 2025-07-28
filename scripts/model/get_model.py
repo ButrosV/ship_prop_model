@@ -77,20 +77,20 @@ def load_train_model(X=None, Y=None, model_file_name:str=None, preprocessor_file
 
     if model_params and X is not None and Y is not None:
         chain_model = RegressorChain(XGBRegressor(**model_params))
-        print("Fitting and saving final model from provided parameters.")  # remove after testing
+        print("Fitting and saving final model from provided parameters.")  # optional, remove if not needed
         final_model = _handle_fitting(model=chain_model, X=X, Y=Y, preprocessor=preprocessor)
     elif model and X is not None and Y is not None:
-        print("Fitting and saving provided custom model.")   # remove after testing
+        print("Fitting and saving provided custom model.")   # optional, remove if not needed
         final_model = _handle_fitting(model=model, X=X, Y=Y, preprocessor=preprocessor)
     elif final_model_path.is_file():
         final_model = joblib.load(filename=final_model_path) 
-        print("Loading already saved final model.")  # remove after testing
+        print("Loading already saved final model.")  # optional, remove if not needed
     elif tuned_model_path.is_file():
         final_model = joblib.load(filename=tuned_model_path)
-        print("Loading best grid model.")  # remove after testing
+        print("Loading best grid model.")  # optional, remove if not needed
     elif cnfg["models"]["best_tuned_params"] and X is not None and Y is not None:
         chain_model = RegressorChain(XGBRegressor(**cnfg["models"]["best_tuned_params"]))
-        print("Fitting and saving final model from config file parameters.")  # remove after testing
+        print("Fitting and saving final model from config file parameters.")  # optional, remove if not needed
         final_model = _handle_fitting(model=chain_model, X=X, Y=Y, preprocessor=preprocessor)
     else:
         print("No parameters to fit final model or saved models found.")

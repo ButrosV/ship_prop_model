@@ -154,9 +154,9 @@ class HyperParamSearch():
             self.preprocess(X)  
         if rs_model_path.is_file():
             random_search = joblib.load(filename=rs_model_path)
-            print("Loading Random search results from saved model.")  # remove after testing
+            print("Loading Random search results from saved model.")  # optional, remove if not needed
         else:
-            print("Fitting and saving new random search.")  # remove after testing
+            print("Fitting and saving new random search.")  # optional, remove if not needed
             ranges = cnfg["hyperparameter_tuning"]["random_search_ranges"]
             param_distributions = param_distribution or {
                 key:(randint(value[0], value[1]
@@ -170,14 +170,10 @@ class HyperParamSearch():
                 n_iter=n_iter,
                 n_jobs=n_jobs,
                 scoring=scoring,
-                verbose=2,  #remove after testing
+                # verbose=2,  # optional, remove if not needed
             )          
             X_train_prep = self.preprocess_output.transform(X)
             random_search.fit(X_train_prep, y)
-            if hasattr(random_search, "best_estimator_"):  # remove after testing
-                joblib.dump(value=random_search, filename=rs_model_path)
-            else:
-                print("No best estimator found, random search likely failed.")
         self.random_search_result = random_search
         return random_search
         
@@ -216,14 +212,10 @@ class HyperParamSearch():
                             scoring=scoring,
                             cv=cv,
                             n_jobs=n_jobs,
-                            verbose=2,  # remove after testting
+                            # verbose=2,  # remove after testting
                             )
             X_train_prep = self.preprocess_output.transform(X)
             grid_search.fit(X_train_prep, y)
-            if hasattr(grid_search, "best_estimator_"):  # remove after testing
-                joblib.dump(value=grid_search, filename=gs_model_path)
-            else:
-                print("No best estimator found, gridsearch likely failed.")
         self.grid_search_result = grid_search
         return grid_search
         
