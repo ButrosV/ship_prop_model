@@ -8,8 +8,7 @@ fastapi
 uvicorn
 scikit-learn
 xgboost
-fastapi
-uvicorn
+
 
 # Python version
 python_version >= 3.10
