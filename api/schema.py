@@ -39,3 +39,10 @@ class PropulsionOutput(BaseModel):
 
     class Config:
         from_attributes = True  # remove after testing, SQLAlchemy specific: enable Pydantic data read from database models
+
+
+class User(BaseModel):
+    """Class for user schema, test purposes - remove after testing"""
+    name: str
+    email: str
+    password:str
