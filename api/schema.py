@@ -32,17 +32,38 @@ class PropulsionInputFull(BaseModel):
     fuelEfficiency: Optional[float] = Field(..., example=0)
 
 
-
-class PropulsionOutput(BaseModel):
-    shaftPower: float = Field(..., example=1.575)
-    speedOverGround:float = Field(..., example= 0)
-
-    class Config:
-        from_attributes = True  # remove after testing, SQLAlchemy specific: enable Pydantic data read from database models
-
-
 class User(BaseModel):
     """Class for user schema, test purposes - remove after testing"""
     name: str
     email: str
     password:str
+
+
+class ShowUser(BaseModel):
+    """Class for user schema, test purposes - remove after testing"""
+    name: str
+    email: str
+
+
+class PropulsionOutput(BaseModel):
+    shaftPower: float = Field(..., example=1.575)
+    speedOverGround:float = Field(..., example= 0)
+    predicting_user: ShowUser  # experiments of linking data tables, remove after testing
+
+    class Config:
+        from_attributes = True  # remove after testing, SQLAlchemy specific: enable Pydantic data read from database models
+
+
+class Login(BaseModel):
+    username: str
+    password: str
+
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+
+class TokenData(BaseModel):
+    email: str | None = None
+

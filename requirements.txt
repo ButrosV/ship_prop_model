@@ -9,6 +9,10 @@ uvicorn
 scikit-learn
 xgboost
 
+# Optional - database
+sqlalchemy
+passlib[bcrypt]
+pyjwt
 
 # Python version
 python_version >= 3.10
