@@ -128,7 +128,7 @@ python main.py --tune_model --task_features
 
 ### Run Application
 ```bash
-python app.py
+uvicorn api.app:app --reload
 ```
 ## Configuration
 

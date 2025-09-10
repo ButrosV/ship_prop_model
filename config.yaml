@@ -64,3 +64,6 @@ models:
     'max_depth': 12
     'min_child_weight': 14.5268163746471
     'n_estimators': 125
+api:
+  host: "127.0.0.1"
+  port: 5000
