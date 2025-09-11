@@ -37,6 +37,9 @@ class HyperParamSearch():
         """
         Initialize the hyperparameter search with optional custom model and save directory.
         Create save directory if it does not exist.
+        If 'save_folder' not provided, it will be created from config file inputs based 
+            on wether full or reduced feature set is used for training (remove_features 
+            parameter provided or left as default None).
         :param model: Custom multi-output model. Defaults to RegressorChain(XGBRegressor()).
         :param save_folder: Path to save/load model and preprocessor files. Defaults to model
                 directory from config file.
@@ -46,15 +49,17 @@ class HyperParamSearch():
                                             Default behaviour: do not drop.
         """
         self.model = model or RegressorChain(XGBRegressor(n_jobs=1))
-        self.folder_path = save_folder or Path(__file__).parent.parent / cnfg["models"]["model_dir"] # for script
-        self.folder_path.mkdir(parents=True, exist_ok=True)
         self.preprocess_output = None
         self.random_search_result = None
         self.grid_search_result = None
         self.new_grid_params = None
         self.remove_features = remove_features
         self.drop_engineer_source_features = bool(drop_engineer_source_features)
-        
+        if self.remove_features is not None:
+            self.folder_path = save_folder or Path(__file__).parent.parent / cnfg["models"]["model_dir"]
+        else:
+            self.folder_path = save_folder or Path(__file__).parent.parent / cnfg["models"]["model_dir_all_feats"]
+        self.folder_path.mkdir(parents=True, exist_ok=True)        
 
     def preprocess(self, X, preprocess_filename:str=None, preproces_pipeline=None,
                    drop_engineer_source_features:bool=None):
@@ -139,7 +144,7 @@ class HyperParamSearch():
         If necessary, run data preprocessing.
         :param X: Training feature data.
         :param y: Training target data.
-        :param rs_model_filename: Filename for storing/loading the RandomizedSearchCV model.
+        :param rs_model_filename: Filename for loading the RandomizedSearchCV model.
         :param param_distribution: Dictionary of parameter distributions for sampling.
                 If not provided, generates param_distributions from ranges defined in config file.
         :param n_iter: Number of parameter settings sampled.
@@ -186,7 +191,7 @@ class HyperParamSearch():
         If necessary, run data preprocessing.
         :param X: Training feature data.
         :param y: Training target data.
-        :param gs_model_filename: Filename to save/load the GridSearchCV model.
+        :param gs_model_filename: Filename to load the GridSearchCV model.
         :param param_grid: Parameter grid to use. If None, will generate using best random search params.
         :param cv: Number of cross-validation folds.
         :param n_jobs: Number of parallel jobs.
@@ -220,14 +225,15 @@ class HyperParamSearch():
         return grid_search
         
 
-    def full_param_search(self, X, y, param_distribution=None, param_grid=None, 
-                    grid_param_range:float=0.1, grid_n_params:int=5,
-                    n_iter:int=200, random_cv:int=3, grid_cv:int=3, n_jobs:int=4,
-                    scoring:str='r2'):
+    def full_param_search(self, X, y, final_model_filename:str=None,
+                          param_distribution=None, param_grid=None,
+                          grid_param_range:float=0.1, grid_n_params:int=5,
+                          n_iter:int=200, random_cv:int=3, grid_cv:int=3, n_jobs:int=4,
+                          scoring:str='r2'):
         """
         Conduct full hyperparameter search: randomized search followed by grid search.
         Grid search parameters are generated as a normal-like distribution from best 
-            results of the random search.
+            results of the random search. Save final model with best GridSearch hyperparameters.
         :param X: Training feature data.
         :param y: Training target data.
         :param param_distribution: Parameter distribution for the random search.
@@ -241,6 +247,7 @@ class HyperParamSearch():
         :param scoring: Scoring metric for evaluation.
         :return: Final GridSearchCV object fitted on data.
         """
+        filename = final_model_filename or cnfg["models"]["final_model_file"]
         self.random_search(X=X, y=y, param_distribution=param_distribution, n_iter=n_iter,
                            cv=random_cv, n_jobs=n_jobs, scoring=scoring)
         normal_grid = param_grid or self.normal_distr_parameters(
@@ -248,5 +255,6 @@ class HyperParamSearch():
                 range_from_mean=grid_param_range, n_params=grid_n_params)
         self.grid_search(X=X, y=y, param_grid=normal_grid, cv=grid_cv, n_jobs=n_jobs,
                          scoring=scoring)
+        joblib.dump(value=self.grid_search, filename=self.folder_path / filename)
         return self.grid_search_result.best_estimator_
     

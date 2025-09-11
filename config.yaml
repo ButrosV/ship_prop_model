@@ -56,6 +56,7 @@ hyperparameter_tuning:
   grid_search_file: "grid_search_xgb.pkl"
 models:
   model_dir: "models"  # uncomment after testing
+  model_dir_all_feats: "models/full_feature_set"
   # model_dir: "C:/Users/Peteris/Documents/CV/2025/shiprojects/hw_app/models_CLI_test"  # remove after testing
   # model_dir: "C:/Users/pich/Documents/CV/2025/shiprojects/hw_app/models_CLI_test"  # remove after testing
   final_model_file: "final_model.pkl"

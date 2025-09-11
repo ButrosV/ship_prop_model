@@ -105,25 +105,25 @@ pip install -r requirements.txt
 Train and evaluate the model using default model and config file hyperparameters:
 
 ```bash
-python main.py
+python train_model.py
 ```
 
 Train with full hyperparameter tuning (\~15 hrs):
 
 ```bash
-python main.py --tune_model
+python train_model.py --tune_model
 ```
 
 Train using only task-specified features:
 
 ```bash
-python main.py --task_features
+python train_model.py --task_features
 ```
 
 Combine both:
 
 ```bash
-python main.py --tune_model --task_features
+python train_model.py --tune_model --task_features
 ```
 
 ### Run Application
