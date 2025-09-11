@@ -58,6 +58,8 @@ Metrics used to compare models for model selection:
 
 ### 2: FastAPI Deployment
 
+Test api with the same input feature count as you trained your model with.
+
 ## Project Structure
 
 ```

@@ -31,7 +31,10 @@ def main(tune_model:bool=False, task_features:bool=False):
     df = clean_data(data=df)
 
     # Split data
-    X_train, X_test, y_train, y_test = split_dataset(data=df, n_test_samples=3)
+    X_train, X_test, y_train, y_test = split_dataset(
+        data=df,
+        n_test_samples=3,
+        test_set_w_reduced_features=remove_features)
 
     # (optional, uncomment if needed. Run time ~ 15h)
     if tune_model:
