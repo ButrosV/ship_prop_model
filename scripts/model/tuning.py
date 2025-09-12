@@ -259,7 +259,7 @@ class HyperParamSearch():
                          scoring=scoring)
         
         if save_model:
-            joblib.dump(value=self.grid_search, filename=self.folder_path / filename)
+            joblib.dump(value=self.grid_search_result, filename=self.folder_path / filename)
             
         return self.grid_search_result.best_estimator_
     

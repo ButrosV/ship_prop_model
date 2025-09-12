@@ -2,10 +2,11 @@ import os
 from fastapi import FastAPI, status, Request, Response # pyright: ignore[reportMissingImports]
 from fastapi.responses import HTMLResponse # pyright: ignore[reportMissingImports]
 import uvicorn # pyright: ignore[reportMissingImports]
+from contextlib import asynccontextmanager
 from api.schema import PropulsionInputBase, PropulsionInputFull, PropulsionOutput
 from api.routers import predictions, home
-from scripts.model.get_model import load_train_model
 from scripts.config import cnfg
+from api.model.load_models import load_models, MODELS
 
 HOST = cnfg["api"]["host"]
 PORT = cnfg["api"]["port"]
@@ -21,7 +22,15 @@ tags_metadata = [
     },
 ]
 
-app = FastAPI(openapi_tags=tags_metadata)
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    load_models()
+    print("models loaded.")
+    yield
+    print("Closing API")
+
+app = FastAPI(openapi_tags=tags_metadata, lifespan=lifespan)
 
 app.include_router(home.router)
 app.include_router(predictions.router)

@@ -101,6 +101,11 @@ Clone the [git repository](https://github.com/ButrosV/ship_prop_model.git) or do
 ```bash
 pip install -r requirements.txt
 ```
+#### If .env isn't picked up by your editor:
+Set PYTHONPATH manually from project root:
+```export PYTHONPATH=$(pwd)```       # macOS/Linux
+```$env:PYTHONPATH = (Get-Location)```  # PowerShell
+
 
 ### Run Model Pipeline
 
