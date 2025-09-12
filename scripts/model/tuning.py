@@ -225,7 +225,8 @@ class HyperParamSearch():
         return grid_search
         
 
-    def full_param_search(self, X, y, final_model_filename:str=None,
+    def full_param_search(self, X, y, 
+                          save_model:bool=False, final_model_filename:str=None,
                           param_distribution=None, param_grid=None,
                           grid_param_range:float=0.1, grid_n_params:int=5,
                           n_iter:int=200, random_cv:int=3, grid_cv:int=3, n_jobs:int=4,
@@ -236,6 +237,7 @@ class HyperParamSearch():
             results of the random search. Save final model with best GridSearch hyperparameters.
         :param X: Training feature data.
         :param y: Training target data.
+        :param save_model: toggle saving of the final tuned mode. Default value - do not save.
         :param param_distribution: Parameter distribution for the random search.
         :param param_grid: Parameter grid for grid search. If None, it will be generated.
         :param grid_param_range: Range from mean to define std dev for grid param generation.
@@ -255,6 +257,9 @@ class HyperParamSearch():
                 range_from_mean=grid_param_range, n_params=grid_n_params)
         self.grid_search(X=X, y=y, param_grid=normal_grid, cv=grid_cv, n_jobs=n_jobs,
                          scoring=scoring)
-        joblib.dump(value=self.grid_search, filename=self.folder_path / filename)
+        
+        if save_model:
+            joblib.dump(value=self.grid_search, filename=self.folder_path / filename)
+            
         return self.grid_search_result.best_estimator_
     

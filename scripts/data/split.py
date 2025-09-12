@@ -81,9 +81,9 @@ def split_dataset(data:pd.DataFrame, validation_size:float=0.2,
             json.dump(obj=feature_target_pairs, fp=file, indent=2)
 
         if test_set_w_reduced_features is not None:
-            filename_short = filename + "_short"
+            filename_short = cnfg["data"]["test_data_filename_short"]
             _handle_short_test_set(feature_target_pairs, test_set_w_reduced_features,
-                                   path_to_file, filename_short)
+                                   path_to_folder, filename_short)
 
     X_train, X_test, y_train, y_test = train_test_split(
         data.drop(columns=target_columns),

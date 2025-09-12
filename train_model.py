@@ -23,6 +23,7 @@ def main(tune_model:bool=False, task_features:bool=False):
     :return: None
     """
     remove_features = cnfg["data"]["data_preprocessing"]["features_to_drop_task"] if task_features else None
+    model_save_folder = cnfg["models"]["model_dir"] if task_features else cnfg["models"]["model_dir_all_feats"]
     drop_engineer_source_features = False if task_features else True
     # Load data
     df = get_and_load_file()  # add data_folder=PATH_TO_DATA when testing
@@ -36,18 +37,19 @@ def main(tune_model:bool=False, task_features:bool=False):
         n_test_samples=3,
         test_set_w_reduced_features=remove_features)
 
-    # (optional, uncomment if needed. Run time ~ 15h)
+    # (optional. Run time ~ 15h)
     if tune_model:
         tjuuneris = HyperParamSearch(remove_features=remove_features,
                                          drop_engineer_source_features=drop_engineer_source_features)
-        tjuuneris.full_param_search(X=X_train, y=y_train, n_jobs=2)
+        tjuuneris.full_param_search(X=X_train, y=y_train, n_jobs=2, save_model=True)
 
     # Train or load model 
         the_model, the_preprocessor = tjuuneris.grid_search_result, tjuuneris.preprocess_output
     else:
         the_model, the_preprocessor = load_train_model(X=X_train, Y=y_train,
                                                        remove_features=remove_features,
-                                                       drop_engineer_source_features=drop_engineer_source_features)
+                                                       drop_engineer_source_features=drop_engineer_source_features,
+                                                       save_folder=model_save_folder)
     # Evaluate
     y_pred = the_model.predict(the_preprocessor.transform(X_test))
     print(f"\nEvaluation table for XGBoost model with random->Grid hyperparameter search.")

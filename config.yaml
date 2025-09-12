@@ -5,6 +5,7 @@ data:
   data_url: "https://drive.google.com/file/d/1Xx4ozrFDDmzDCuIyUTxjzj43eARpxW1o/view?usp=sharing"
   data_filename: "test-assignment-dataset.json"
   test_data_filename: "api_test_feature_target_pairs.json"
+  test_data_filename_short: "api_test_feature_target_pairs_short.json"
   data_cleaning:
     columns_to_drop: ["recommendedMassFlowRate","expectedSpeedOverGround","recommendedPower","expectedCarbonIntensityIndicator",]
     columns_nan_to_zero: ["fuelEfficiency"]
@@ -39,6 +40,17 @@ data:
       'windWavePeriod',
       'salinity',
       'seaLevel']
+    task_features: [
+      "windSpeed",
+      "windDirection",
+      "waveHeight",
+      "waveDirection",
+      "swellHeight",
+      "swellDirection",
+      "currentSpeed",
+      "currentDirection",
+      "airTemperature",
+      "mainEngineMassFlowRate"]
     preprocessor_file: "tuning_prep.pkl"
   target_columns: ["shaftPower", "speedOverGround"]
 feature_engineering:

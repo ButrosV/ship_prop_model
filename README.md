@@ -104,19 +104,20 @@ pip install -r requirements.txt
 
 ### Run Model Pipeline
 
-Train and evaluate the model using default model and config file hyperparameters:
+Train and evaluate the model using default model and benchmark hyperparameters from config file:
 
 ```bash
 python train_model.py
 ```
 
-Train with full hyperparameter tuning (\~15 hrs):
+Train with full hyperparameter tuning (~15 hrs), slightly improves results over benchmark hyperparameters:
 
 ```bash
 python train_model.py --tune_model
 ```
 
 Train using only task-specified features:
+**IMPORTANT** Whichever you choose: training model on full or narrower task-specific feature set, make sure that later predictions (including API call) are made on the same set of features.
 
 ```bash
 python train_model.py --task_features
@@ -127,11 +128,30 @@ Combine both:
 ```bash
 python train_model.py --tune_model --task_features
 ```
+#### Alternatively run jupyter notebook:
+**WARNING** Running entire notebook can take up to 20h and requires ~ 5GB of space for saving model selection iterations.
+
+Run all cells in `.\notebooks\ship_hw_EDA_experiments.ipynb` file to:
+- Follow exploratory data analysis;
+- Follow model selection (by default saves all experimental models, saving can be turned off manually withinin the notebook);
+- tune hyperparameters for selected model;
+- save final model for later use with FastAPI.
 
 ### Run Application
 ```bash
 uvicorn api.app:app --reload
 ```
+
+### Clean up your working directory
+- To remove data amn models folder contents:
+```bash
+rm -rf data/* models/*
+```
+- To clean entire current root directory:
+```bash
+rm -rf ./*
+```
+
 ## Configuration
 
 YAML config file includes:
@@ -139,7 +159,7 @@ YAML config file includes:
 * Default preprocessor and model file names
 * Default model parameters for final `XBRegressor()` or for tuning initialization with `RandomizedSearchCV`.
 * Feature drop lists
-* Deafault column name definitions for targets and feature engineering defaults
+* Default column name definitions for targets and feature engineering defaults
 
 ## Justification for Design Choices
 

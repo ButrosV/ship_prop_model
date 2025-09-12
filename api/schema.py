@@ -34,7 +34,6 @@ class PropulsionInputBase(BaseModel):
     currentDirection: float = Field(..., example=159.73)
     airTemperature: float = Field(..., example=25.65)
     mainEngineMassFlowRate: float = Field(..., example=0.0)
-    fuelEfficiency: Optional[float] = Field(..., example=0)  # remove after testing
 
 
 class PropulsionInputFull(PropulsionInputBase):
@@ -92,19 +91,6 @@ class PropulsionInputFull(PropulsionInputBase):
     seaLevel: Optional[float] = Field(None)
 
 
-# class User(BaseModel):
-#     """Class for user schema, test purposes - remove after testing"""
-#     name: str
-#     email: str
-#     password:str
-
-
-# class ShowUser(BaseModel):
-#     """Class for user schema, test purposes - remove after testing"""
-#     name: str
-#     email: str
-
-
 class PropulsionOutput(BaseModel):
     shaftPower: float = Field(..., example=1.575)
     speedOverGround:float = Field(..., example= 0)
@@ -112,18 +98,4 @@ class PropulsionOutput(BaseModel):
 
     # class Config:
     #     from_attributes = True  # remove after testing, SQLAlchemy specific: enable Pydantic data read from database models
-
-
-# class Login(BaseModel):
-#     username: str
-#     password: str
-
-
-# class Token(BaseModel):
-#     access_token: str
-#     token_type: str
-
-
-# class TokenData(BaseModel):
-#     email: str | None = None
 
