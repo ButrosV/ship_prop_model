@@ -22,7 +22,15 @@ def main(tune_model:bool=False, task_features:bool=False):
                             original task description.
     :return: None
     """
-    remove_features = cnfg["data"]["data_preprocessing"]["features_to_drop_task"] if task_features else None
+    remove_features = cnfg.get(
+        "data", {}).get(
+            "data_preprocessing",{}).get(
+                "features_to_drop_task",{}
+                ) if task_features else None  # safer way to get values - in case of KeyError get {None} key
+    keep_features = cnfg.get("data", {}
+                             ).get("data_preprocessing", {}
+                                   ).get("task_features"
+                                         ) if task_features else None
     model_save_folder = cnfg["models"]["model_dir"] if task_features else cnfg["models"]["model_dir_all_feats"]
     drop_engineer_source_features = False if task_features else True
     # Load data
@@ -35,7 +43,7 @@ def main(tune_model:bool=False, task_features:bool=False):
     X_train, X_test, y_train, y_test = split_dataset(
         data=df,
         n_test_samples=3,
-        test_set_w_reduced_features=remove_features)
+        reduced_features_set=keep_features)
 
     # (optional. Run time ~ 15h)
     if tune_model:

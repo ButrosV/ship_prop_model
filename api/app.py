@@ -6,7 +6,7 @@ from contextlib import asynccontextmanager
 from api.schema import PropulsionInputBase, PropulsionInputFull, PropulsionOutput
 from api.routers import predictions, home
 from scripts.config import cnfg
-from api.model.load_models import load_models, MODELS
+from api.model.load_models import load_models, MODELS, choose_model
 
 HOST = cnfg["api"]["host"]
 PORT = cnfg["api"]["port"]
@@ -27,6 +27,8 @@ tags_metadata = [
 async def lifespan(app: FastAPI):
     load_models()
     print("models loaded.")
+    for model in MODELS:  # remove after testing
+        print(f"Model loaded successfully: {model}: {type(MODELS[model])}")
     yield
     print("Closing API")
 
@@ -40,3 +42,5 @@ if __name__ == "__main__":   # use not default 8000 port, but defined one, use '
     HOST = os.getenv("HOST", HOST)  # Default to config file value ('127.0.0.1') if not set
     PORT = int(os.getenv("PORT", PORT))    # Default to config file value (5000) if not set
     uvicorn.run(app, host=HOST, port=PORT)
+
+

@@ -12,7 +12,7 @@ def _handle_timestamps(value):
         return value.isoformat()
     return value
 
-def _handle_short_test_set(full_target_pairs, features_to_drop, path_to_folder, save_filename):
+def _handle_short_test_set(full_target_pairs, features_to_keep, path_to_folder, save_filename):
     """
     A helper function to create and save a reduced version of a test set
     by removing specified features and writing the result to a JSON file.
@@ -20,22 +20,26 @@ def _handle_short_test_set(full_target_pairs, features_to_drop, path_to_folder, 
     :param full_target_pairs: List of dictionaries, where each dictionary contains
                               'features' (a dict of feature names and values) and
                               'targets' (a dict of target names and values).
-    :param features_to_drop: List of feature names to exclude from the shortened dataset.
+    :param features_to_keep: List of feature names to keep for the shortened dataset.
     :param path_to_folder: Path object representing the directory in which to save the JSON file.
     :param save_filename: Name of the output JSON file containing the reduced feature set.
     :return: None. The reduced dataset is written to disk in JSON format.
     """
     feature_target_pairs_short = []
+
     for row in full_target_pairs:
         filtered_features = {
-        key: value
-        for key, value in row["features"].items()
-        if key not in features_to_drop
-    }
-    feature_target_pairs_short.append({
-        "features": filtered_features,
-        "targets": row["targets"]
-    })
+        key: row["features"][key]
+        for key in features_to_keep
+        if key in row["features"]
+        }
+    
+        feature_target_pairs_short.append({
+            "features": filtered_features,
+            "targets": row["targets"]
+        })
+
+    path_to_folder.mkdir(parents=True, exist_ok=True)
 
     with open(path_to_folder / save_filename, "w") as file:
         json.dump(obj=feature_target_pairs_short, fp=file, indent=2)
@@ -45,7 +49,7 @@ def split_dataset(data:pd.DataFrame, validation_size:float=0.2,
                   n_test_samples:int=None,
                   test_set_folder = None,
                   test_set_filename = None,
-                  test_set_w_reduced_features = None,
+                  reduced_features_set = None,
                   target_columns = None)->tuple:
     """
     Split the input dataset into training and validation sets. Optionally sample a specified number
@@ -58,7 +62,7 @@ def split_dataset(data:pd.DataFrame, validation_size:float=0.2,
     :param n_test_samples: Number of random rows to sample for the test set.
     :param test_set_folder: Directory where the test set JSON file should be saved. Defaults to config file value.
     :param test_set_filename: Name of the test set JSON file. Defaults to filename from config file.
-    :param test_set_w_reduced_features: Features to drop for shortened JSON test file. Defaults to None.,
+    :param reduced_features_set: Features to keep for shortened JSON test file. Defaults to None.,
     :param target_columns: List of target column names. Defaults to config file target column list.
     :return: Tuple (X_train, X_valid, y_train, y_valid) with split features and targets.
     """
@@ -80,9 +84,9 @@ def split_dataset(data:pd.DataFrame, validation_size:float=0.2,
         with open(path_to_file, "w") as file:
             json.dump(obj=feature_target_pairs, fp=file, indent=2)
 
-        if test_set_w_reduced_features is not None:
+        if reduced_features_set is not None:
             filename_short = cnfg["data"]["test_data_filename_short"]
-            _handle_short_test_set(feature_target_pairs, test_set_w_reduced_features,
+            _handle_short_test_set(feature_target_pairs, reduced_features_set,
                                    path_to_folder, filename_short)
 
     X_train, X_test, y_train, y_test = train_test_split(

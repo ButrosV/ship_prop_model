@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session # pyright: ignore[reportMissingImports]
 from fastapi import APIRouter, HTTPException, status, Depends # pyright: ignore[reportMissingImports]
 from api.schema import PropulsionOutput, PropulsionInputFull
 from scripts.model.get_model import load_train_model
+from api.model.load_models import load_models, MODELS, choose_model
 
 # from ..oauth2 import get_current_user
 

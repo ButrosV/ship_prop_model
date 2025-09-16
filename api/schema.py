@@ -62,7 +62,7 @@ class PropulsionInputFull(PropulsionInputBase):
     heading: Optional[float] = Field(None, example=180.0)
     courseOverGround: Optional[float] = Field(None, example=175.0)
     status: Optional[int] = Field(None, example=1)
-    
+
     mainEngineVolumeFlowRate: Optional[float] = Field(None)
     mainEngineDensity: Optional[float] = Field(None)
     mainEngineTemperature: Optional[float] = Field(None)
@@ -82,7 +82,7 @@ class PropulsionInputFull(PropulsionInputBase):
     gust: Optional[float] = Field(None)
     swellPeriod: Optional[float] = Field(None)
     wavePeriod: Optional[float] = Field(None)
-    
+
     windWaveDirection: Optional[float] = Field(None)
     windWaveHeight: Optional[float] = Field(None)
     windWavePeriod: Optional[float] = Field(None)
