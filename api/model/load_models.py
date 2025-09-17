@@ -15,20 +15,43 @@ MODEL_PATHS = {
         cnfg["models"]["model_dir_all_feats"] / cnfg["models"]["final_model_file"],
     }
 
+PREPROCESSOR_PATHS = {
+    cnfg["models"]["model_names"]["limited_feat"]: \
+         cnfg["models"]["model_dir"] / cnfg["data"]["data_preprocessing"]["preprocessor_file"],
+    cnfg["models"]["model_names"]["full_feat"]: \
+         cnfg["models"]["model_dir"] / cnfg["data"]["data_preprocessing"]["preprocessor_file"],
+    }
 
-def load_models(model_path=MODEL_PATHS, loaded_models=MODELS):
+
+def load_models(model_path=MODEL_PATHS,
+                preprocessor_path=PREPROCESSOR_PATHS,
+                loaded_models=MODELS):
     """
-    Load models from given paths into a dictionary, skipping missing files.
+    Load models and preprocessor pipeline from given paths into a dictionary,
+        skipping missing files.
 
     :param model_path: Dict of model names to file paths. Defaults to MODEL_PATHS.
+    :param preprocessor_path: Dict of model names and paths to respective 
+        preprocessor pipelines. Defaults to PREPROCESSOR_PATH.
     :param loaded_models: Dict to store loaded models. Defaults to MODELS.
+    :return: Nested dictionary with model name, 
+        respective "model" and "preprocessor" files. 
     """
+    # TODO: update docstring
     for name, path in model_path.items():
         if path.exists():
-            loaded_models[name] = joblib.load(path)
+            loaded_models[name] = {"model":joblib.load(path)}
             print(f"loaded {name} model.")
         else:
             print(f"Model {name} not found, continuing w/o it.")
+
+    for name, path in preprocessor_path.items():
+        if path.exists():
+            loaded_models[name]["preprocessor"] = joblib.load(path)
+            print(f"loaded {name} preprocessor.")
+        else:
+            print(f"Preprocessor {name} not found, continuing w/o it.")
+
 
 def choose_model(input_data,
                  input_schemas:list=None,

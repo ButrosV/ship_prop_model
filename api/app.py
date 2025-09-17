@@ -28,7 +28,8 @@ async def lifespan(app: FastAPI):
     load_models()
     print("models loaded.")
     for model in MODELS:  # remove after testing
-        print(f"Model loaded successfully: {model}: {type(MODELS[model])}")
+        print(f"Model loaded successfully: {model}: {type(MODELS[model]["model"])}")
+        print(f"Preprocessor loaded successfully: {model}: {type(MODELS[model]["preprocessor"])}")
     yield
     print("Closing API")
 

@@ -17,6 +17,8 @@ router = APIRouter(
 @router.post("/", response_model=PropulsionOutput, status_code=status.HTTP_201_CREATED)
 def predict(input_data: PropulsionInputFull):
     """path/endpoint operation function"""
-    the_model, the_preprocessor = load_train_model()
+    # Load model and preprocessor based on choose_model
+    model_type = choose_model(input_data=input_data)
+    the_model, the_preprocessor = MODELS[model_type]["model"], MODELS[model_type]["preprocessor"]
     result = the_model.predict(the_preprocessor.transform(input_data))
     return result

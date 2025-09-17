@@ -1,8 +1,8 @@
 from pathlib import Path
-import pandas as pd
+import pandas as pd # pyright: ignore[reportMissingModuleSource]
 from scripts.config import cnfg
 import json
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split # pyright: ignore[reportMissingModuleSource]
 
 def _handle_timestamps(value):
     """
