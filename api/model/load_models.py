@@ -19,7 +19,7 @@ PREPROCESSOR_PATHS = {
     cnfg["models"]["model_names"]["limited_feat"]: \
          cnfg["models"]["model_dir"] / cnfg["data"]["data_preprocessing"]["preprocessor_file"],
     cnfg["models"]["model_names"]["full_feat"]: \
-         cnfg["models"]["model_dir"] / cnfg["data"]["data_preprocessing"]["preprocessor_file"],
+         cnfg["models"]["model_dir_all_feats"] / cnfg["data"]["data_preprocessing"]["preprocessor_file"],
     }
 
 
@@ -37,7 +37,6 @@ def load_models(model_path=MODEL_PATHS,
     :return: Nested dictionary with model name, 
         respective "model" and "preprocessor" files. 
     """
-    # TODO: update docstring
     for name, path in model_path.items():
         if path.exists():
             loaded_models[name] = {"model":joblib.load(path)}
@@ -72,13 +71,12 @@ def choose_model(input_data,
         feature_names = {key: input_schemas[index] for index, key in enumerate(model_names)}
     else:
         return "Mismatch between model schema and model type counts."
-    # TODO: process input for nones....
     for model_type, schema in feature_names.items():
         svchema_keys = schema.model_fields.keys()
 
-        if set(input_data.dict(exclude_unset=True).keys()) == set(svchema_keys):
-            print(model_type)
-            print(input_data.dict(exclude_unset=True))
+        if set(input_data.keys()) == set(svchema_keys):
+            print(model_type)  # remove after testing
+            print(input_data)  # remove after testing
             return model_type
         
     return "Feature names or count mismatch fields in input schemas for 'full feature set' predictions."

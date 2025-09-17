@@ -266,7 +266,10 @@ class FeatureEngineer(BaseEstimator, TransformerMixin):
         :return: Transformed DataFrame with engineered features.
         """
         if not hasattr(X, "columns"):
-            df = pd.DataFrame(X, columns=self.feature_names_in_)
+            if self.feature_names_in_ is not None:
+                df = pd.DataFrame(X, columns=self.feature_names_in_)
+            else:
+                raise ValueError("Input does not have column names to reconstruct DataFrame.")
         elif isinstance(X, pd.DataFrame):
             df = X.copy(deep=True)
         df = self.transform_angles(X=df)

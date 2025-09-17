@@ -1,4 +1,5 @@
 from typing import List
+import pandas as pd # pyright: ignore[reportMissingModuleSource]
 from sqlalchemy import desc # pyright: ignore[reportMissingImports]
 from sqlalchemy.orm import Session # pyright: ignore[reportMissingImports]
 from fastapi import APIRouter, HTTPException, status, Depends # pyright: ignore[reportMissingImports]
@@ -18,6 +19,7 @@ router = APIRouter(
 def predict(input_data: PropulsionInputFull):
     """path/endpoint operation function"""
     # Load model and preprocessor based on choose_model
+    input_data = input_data.dict(exclude_unset=True)
     model_type = choose_model(input_data=input_data)
     if model_type not in MODELS.keys():
         print(f"Cannot work with provided input: {model_type}")
@@ -25,6 +27,9 @@ def predict(input_data: PropulsionInputFull):
             status_code=418,  # I'm a teapot
             detail=model_type
         )
+    df = pd.DataFrame.from_dict(input_data, orient = 'index').T
+    print(df)
     the_model, the_preprocessor = MODELS[model_type]["model"], MODELS[model_type]["preprocessor"]
-    result = the_model.predict(the_preprocessor.transform(input_data))
+    # result = the_model.predict(the_preprocessor.transform(input_data))
+    result = the_model.predict(the_preprocessor.transform(df))
     return result
