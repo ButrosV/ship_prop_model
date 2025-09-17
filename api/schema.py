@@ -63,7 +63,7 @@ class PropulsionInputFull(PropulsionInputBase):
     courseOverGround: Optional[float] = Field(None, example=175.0)
     status: Optional[int] = Field(None, example=1)
 
-    mainEngineVolumeFlowRate: Optional[float] = Field(None)
+    mainEngineVolumeFlowRate: Optional[float] = Field(None, example=7)
     mainEngineDensity: Optional[float] = Field(None)
     mainEngineTemperature: Optional[float] = Field(None)
     mainEngineFuelConsumed: Optional[float] = Field(None)

@@ -19,6 +19,12 @@ def predict(input_data: PropulsionInputFull):
     """path/endpoint operation function"""
     # Load model and preprocessor based on choose_model
     model_type = choose_model(input_data=input_data)
+    if model_type not in MODELS.keys():
+        print(f"Cannot work with provided input: {model_type}")
+        raise HTTPException(
+            status_code=418,  # I'm a teapot
+            detail=model_type
+        )
     the_model, the_preprocessor = MODELS[model_type]["model"], MODELS[model_type]["preprocessor"]
     result = the_model.predict(the_preprocessor.transform(input_data))
     return result

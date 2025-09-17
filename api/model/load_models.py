@@ -72,14 +72,14 @@ def choose_model(input_data,
         feature_names = {key: input_schemas[index] for index, key in enumerate(model_names)}
     else:
         return "Mismatch between model schema and model type counts."
-    print(input_data.keys())
-    print(len(input_data.keys()))
+    # TODO: process input for nones....
     for model_type, schema in feature_names.items():
         svchema_keys = schema.model_fields.keys()
-        print(len(schema.model_fields.keys()))
 
-        if set(input_data.keys()) == set(svchema_keys):
+        if set(input_data.dict(exclude_unset=True).keys()) == set(svchema_keys):
+            print(model_type)
+            print(input_data.dict(exclude_unset=True))
             return model_type
         
-    return "Feature name or count mismatch input schemas."
+    return "Feature names or count mismatch fields in input schemas for 'full feature set' predictions."
 

@@ -1,12 +1,14 @@
 import os
-from fastapi import FastAPI, status, Request, Response # pyright: ignore[reportMissingImports]
-from fastapi.responses import HTMLResponse # pyright: ignore[reportMissingImports]
+from fastapi.exceptions import RequestValidationError # pyright: ignore[reportMissingImports]
+from fastapi import FastAPI# pyright: ignore[reportMissingImports]
+# from fastapi.responses import HTMLResponse, JSONResponse # pyright: ignore[reportMissingImports]
 import uvicorn # pyright: ignore[reportMissingImports]
 from contextlib import asynccontextmanager
 from api.schema import PropulsionInputBase, PropulsionInputFull, PropulsionOutput
 from api.routers import predictions, home
 from scripts.config import cnfg
 from api.model.load_models import load_models, MODELS, choose_model
+from api.handlers import valid_exception_handling
 
 HOST = cnfg["api"]["host"]
 PORT = cnfg["api"]["port"]
@@ -33,7 +35,10 @@ async def lifespan(app: FastAPI):
     yield
     print("Closing API")
 
+
 app = FastAPI(openapi_tags=tags_metadata, lifespan=lifespan)
+
+app.add_exception_handler(RequestValidationError, valid_exception_handling)
 
 app.include_router(home.router)
 app.include_router(predictions.router)
