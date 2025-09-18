@@ -1,6 +1,3 @@
-from typing import List
-from sqlalchemy import desc # pyright: ignore[reportMissingImports]
-from sqlalchemy.orm import Session # pyright: ignore[reportMissingImports]
 from fastapi import APIRouter, Request # pyright: ignore[reportMissingImports]
 from fastapi.responses import HTMLResponse # pyright: ignore[reportMissingImports]
 

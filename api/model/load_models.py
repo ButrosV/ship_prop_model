@@ -1,8 +1,4 @@
 import joblib # pyright: ignore[reportMissingImports]
-# from pathlib import Path
-from scripts.model.tuning import HyperParamSearch
-from scripts.data.feature_select import FeatureSelector
-from scripts.data.feature_engineer import FeatureEngineer
 from api.schema import PropulsionInputBase, PropulsionInputFull
 from scripts.config import cnfg
 
@@ -75,9 +71,6 @@ def choose_model(input_data,
         svchema_keys = schema.model_fields.keys()
 
         if set(input_data.keys()) == set(svchema_keys):
-            print(model_type)  # remove after testing
-            print(input_data)  # remove after testing
             return model_type
         
     return "Feature names or count mismatch fields in input schemas for 'full feature set' predictions."
-

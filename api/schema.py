@@ -2,27 +2,15 @@ from pydantic import BaseModel, Field  # pyright: ignore[reportMissingImports]
 from typing import Optional
 from datetime import datetime
 
-# TODO: consider setting all Optional PropulsionInputFull examples to None or NaN
 
 class PropulsionInputBase(BaseModel):
     """
     Core environmental and engine-related input feature schema for propulsion modeling
     prediction retrieval with FastAPI.
-
     Includes meteorological (wind, wave, swell, current, air temp) and 
     engine mass flow rate data. These fields are mandatory for model inference.
-
-    :param windSpeed: Wind speed [m/s]. Example: 4.19
-    :param windDirection: Wind direction [° from true north]. Example: 205.96
-    :param waveHeight: Wave height [m]. Example: 0.87
-    :param waveDirection: Wave direction [° from true north]. Example: 136.04
-    :param swellHeight: Swell height [m]. Example: 0.06
-    :param swellDirection: Swell direction [° from true north]. Example: 55.77
-    :param currentSpeed: Current speed [m/s]. Example: 0.07
-    :param currentDirection: Current direction [° from true north]. Example: 159.73
-    :param airTemperature: Air temperature [°C]. Example: 25.65
-    :param mainEngineMassFlowRate: Main engine mass flow rate [kg/s]. Example: 0.0
-    :param fuelEfficiency: Fuel efficiency (unit depends on model). Example: 0
+    All fields are required and must be provided by the model's prediction output.
+    Example values are included to illustrate expected data types and units.
     """
     windSpeed: float = Field(..., example=4.19)
     windDirection: float = Field(..., example=205.96)
@@ -41,29 +29,17 @@ class PropulsionInputFull(PropulsionInputBase):
     Extended propulsion input schema including optional environmental, 
     engine, and vessel state features for full model input for models 
     trained on full feature set.
-
-    This class combines environmental, engine performance, and vessel 
-    state parameters, with the following groups:
-    - **Environmental**: Includes wind, wave, swell, and current data.
-    - **Engine**: Covers main and auxiliary engine parameters such as fuel flow, 
-      temperature, and consumption.
-    - **Vessel State**: Contains vessel navigation data like latitude, 
-      longitude, heading, draught, and course over ground.
-    - **Operational**: Includes performance metrics such as shaft speed, torque, 
-      fuel efficiency, and specific fuel consumption.
-    - **Time & Conditions**: Includes timestamp, gust speed, and water salinity.
-
     All fields in this schema are optional except for the core environmental inputs 
-    defined in `PropulsionInputBase`.
+    defined in `PropulsionInputBase`. Optional fields default to None/NaN.
     """
-    latitude: Optional[float] = Field(None, example=12.3456)
-    longitude: Optional[float] = Field(None, example=78.9012)
-    draught: Optional[float] = Field(None, example=6.5)
-    heading: Optional[float] = Field(None, example=180.0)
-    courseOverGround: Optional[float] = Field(None, example=175.0)
-    status: Optional[int] = Field(None, example=1)
+    latitude: Optional[float] = Field(None)
+    longitude: Optional[float] = Field(None)
+    draught: Optional[float] = Field(None)
+    heading: Optional[float] = Field(None)
+    courseOverGround: Optional[float] = Field(None)
+    status: Optional[int] = Field(None)
 
-    mainEngineVolumeFlowRate: Optional[float] = Field(None, example=7)
+    mainEngineVolumeFlowRate: Optional[float] = Field(None)
     mainEngineDensity: Optional[float] = Field(None)
     mainEngineTemperature: Optional[float] = Field(None)
     mainEngineFuelConsumed: Optional[float] = Field(None)
@@ -92,10 +68,10 @@ class PropulsionInputFull(PropulsionInputBase):
 
 
 class PropulsionOutput(BaseModel):
+    """
+    Propulsion output schema representing expected predicted values.
+    All fields are required and must be provided by the model's prediction output.
+    Example values are included to illustrate expected data types and units.
+    """
     shaftPower: float = Field(..., example=1.575)
     speedOverGround:float = Field(..., example= 0)
-    # predicting_user: ShowUser  # experiments of linking data tables, remove after testing
-
-    # class Config:
-    #     from_attributes = True  # remove after testing, SQLAlchemy specific: enable Pydantic data read from database models
-
