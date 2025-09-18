@@ -44,7 +44,6 @@ def organize_input(input_data:pd.DataFrame, preprocessor):
         preprocesoor_input_specs = preprocessor.steps[0][1].feature_names_in_
     else:
         raise AttributeError("Preprocessor does not contain `feature_names_in_`.")
-    # preprocesoor_input_specs = preprocessor[0].feature_names_in_
 
     if input_cols == preprocesoor_input_specs:
         return input_data

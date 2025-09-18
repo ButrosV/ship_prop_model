@@ -4,6 +4,8 @@ from scripts.data.feature_select import FeatureSelector
 from scripts.data.feature_engineer import FeatureEngineer
 from api.model.load_models import load_models, MODELS
 
+# TODO remove file as it is redundant
+
 LIMITED_FEATURES = cnfg["data"]["data_preprocessing"]["task_features"]
 ADDITIONAL_FEATURES = cnfg["data"]["data_preprocessing"]["features_to_drop_task"]
 FULL_FEATURES = LIMITED_FEATURES + ADDITIONAL_FEATURES

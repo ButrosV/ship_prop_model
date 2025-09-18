@@ -9,6 +9,8 @@ from api.model.load_models import MODELS, choose_model  # load_models,
 from api.utils.preprocessing import check_df, organize_input
 
 
+#TODO: update docstrings
+
 router = APIRouter(
     prefix = "/predict",  # add prefix to each router
     tags=["predict"]  # add tag to each router, no need to add individual tags to each router
@@ -31,5 +33,6 @@ def predict(input_data: PropulsionInputFull):
     the_model, the_preprocessor = MODELS[model_type]["model"], MODELS[model_type]["preprocessor"]
     df = check_df(input_data=input_data)
     df = organize_input(df, the_preprocessor)
-    result = the_model.predict(the_preprocessor.transform(df))
-    return result
+    predictions = the_model.predict(the_preprocessor.transform(df))
+    # TODO consider nicer dynamic, schema based output formatting
+    return {"shaftPower": predictions[0][0], "speedOverGround": predictions[0][1]}

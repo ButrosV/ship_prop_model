@@ -10,6 +10,9 @@ from scripts.config import cnfg
 from api.model.load_models import load_models, MODELS  #, choose_model
 from api.utils.handlers import valid_exception_handling
 
+#TODO: update docstrings
+
+
 HOST = cnfg["api"]["host"]
 PORT = cnfg["api"]["port"]
 

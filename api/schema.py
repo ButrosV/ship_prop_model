@@ -2,7 +2,7 @@ from pydantic import BaseModel, Field  # pyright: ignore[reportMissingImports]
 from typing import Optional
 from datetime import datetime
 
-
+# TODO: consider setting all Optional PropulsionInputFull examples to None or NaN
 
 class PropulsionInputBase(BaseModel):
     """
