@@ -1,13 +1,13 @@
 from pathlib import Path
-import joblib
-import numpy as np
-from scipy.stats import uniform, randint, norm
+import joblib # pyright: ignore[reportMissingImports]
+import numpy as np # pyright: ignore[reportMissingImports]
+from scipy.stats import uniform, randint, norm # pyright: ignore[reportMissingImports]
 
-from sklearn.model_selection import RandomizedSearchCV, GridSearchCV
-from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import StandardScaler
-from sklearn.multioutput import RegressorChain
-from xgboost import XGBRegressor
+from sklearn.model_selection import RandomizedSearchCV, GridSearchCV # pyright: ignore[reportMissingModuleSource]
+from sklearn.pipeline import Pipeline # pyright: ignore[reportMissingModuleSource]
+from sklearn.preprocessing import StandardScaler # pyright: ignore[reportMissingModuleSource]
+from sklearn.multioutput import RegressorChain # pyright: ignore[reportMissingModuleSource]
+from xgboost import XGBRegressor # pyright: ignore[reportMissingImports]
 
 from scripts.data.feature_select import FeatureSelector
 from scripts.data.feature_engineer import FeatureEngineer

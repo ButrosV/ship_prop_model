@@ -1,7 +1,7 @@
-import pandas as pd
-import numpy as np
+import pandas as pd # pyright: ignore[reportMissingModuleSource]
+import numpy as np # pyright: ignore[reportMissingImports]
 
-from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score # pyright: ignore[reportMissingModuleSource]
 
 from scripts.utils.eda import top_correlations
 from scripts.config import cnfg

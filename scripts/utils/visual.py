@@ -1,10 +1,10 @@
 import random
-import pandas as pd
-import numpy as np
+import pandas as pd # pyright: ignore[reportMissingModuleSource]
+import numpy as np # pyright: ignore[reportMissingImports]
 
-import matplotlib.pyplot as plt
-import matplotlib.colors as mcolors
-import seaborn as sns
+import matplotlib.pyplot as plt # pyright: ignore[reportMissingModuleSource]
+import matplotlib.colors as mcolors # pyright: ignore[reportMissingModuleSource]
+import seaborn as sns # pyright: ignore[reportMissingModuleSource]
 
 def random_color():
     """

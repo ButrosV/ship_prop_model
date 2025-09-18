@@ -1,7 +1,7 @@
 
-import pandas as pd
+import pandas as pd # pyright: ignore[reportMissingModuleSource]
 from pathlib import Path
-import gdown
+import gdown # pyright: ignore[reportMissingImports]
 import json
 
 from scripts.config import cnfg

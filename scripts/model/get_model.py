@@ -1,8 +1,8 @@
 from pathlib import Path
-import joblib
+import joblib # pyright: ignore[reportMissingImports]
 
-from xgboost import XGBRegressor
-from sklearn.multioutput import RegressorChain
+from xgboost import XGBRegressor # pyright: ignore[reportMissingImports]
+from sklearn.multioutput import RegressorChain # pyright: ignore[reportMissingModuleSource]
 
 from scripts.config import cnfg
 

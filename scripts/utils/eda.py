@@ -1,4 +1,4 @@
-import pandas as pd
+import pandas as pd # pyright: ignore[reportMissingModuleSource]
 
 
 def top_correlations(data:pd.DataFrame, corr_threshold:float=0.95)->pd.Series:

@@ -1,6 +1,6 @@
-import pandas as pd
-import numpy as np
-from sklearn.base import BaseEstimator, TransformerMixin
+import pandas as pd # pyright: ignore[reportMissingModuleSource]
+import numpy as np # pyright: ignore[reportMissingImports]
+from sklearn.base import BaseEstimator, TransformerMixin # pyright: ignore[reportMissingModuleSource]
 
 from scripts.config import cnfg
 

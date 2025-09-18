@@ -1,5 +1,5 @@
-import numpy as np
-import pandas as pd
+import numpy as np # pyright: ignore[reportMissingImports]
+import pandas as pd # pyright: ignore[reportMissingModuleSource]
 from scripts.config import cnfg
 
 
