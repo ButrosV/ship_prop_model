@@ -1,14 +1,14 @@
 import os
 from fastapi.exceptions import RequestValidationError # pyright: ignore[reportMissingImports]
-from fastapi import FastAPI# pyright: ignore[reportMissingImports]
+from fastapi import FastAPI  # pyright: ignore[reportMissingImports]
 # from fastapi.responses import HTMLResponse, JSONResponse # pyright: ignore[reportMissingImports]
 import uvicorn # pyright: ignore[reportMissingImports]
 from contextlib import asynccontextmanager
-from api.schema import PropulsionInputBase, PropulsionInputFull, PropulsionOutput
+# from api.schema import PropulsionInputBase, PropulsionInputFull, PropulsionOutput
 from api.routers import predictions, home
 from scripts.config import cnfg
-from api.model.load_models import load_models, MODELS, choose_model
-from api.handlers import valid_exception_handling
+from api.model.load_models import load_models, MODELS  #, choose_model
+from api.utils.handlers import valid_exception_handling
 
 HOST = cnfg["api"]["host"]
 PORT = cnfg["api"]["port"]
@@ -26,6 +26,8 @@ tags_metadata = [
 
 
 @asynccontextmanager
+
+
 async def lifespan(app: FastAPI):
     load_models()
     print("models loaded.")

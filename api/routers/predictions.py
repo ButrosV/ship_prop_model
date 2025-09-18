@@ -1,13 +1,12 @@
-from typing import List
-import pandas as pd # pyright: ignore[reportMissingModuleSource]
-from sqlalchemy import desc # pyright: ignore[reportMissingImports]
-from sqlalchemy.orm import Session # pyright: ignore[reportMissingImports]
-from fastapi import APIRouter, HTTPException, status, Depends # pyright: ignore[reportMissingImports]
+# from typing import List
+# import pandas as pd # pyright: ignore[reportMissingModuleSource]
+# from sqlalchemy import desc # pyright: ignore[reportMissingImports]
+# from sqlalchemy.orm import Session # pyright: ignore[reportMissingImports]
+from fastapi import APIRouter, HTTPException, status # pyright: ignore[reportMissingImports], # , Depends
 from api.schema import PropulsionOutput, PropulsionInputFull
-from scripts.model.get_model import load_train_model
-from api.model.load_models import load_models, MODELS, choose_model
-
-# from ..oauth2 import get_current_user
+# from scripts.model.get_model import load_train_model
+from api.model.load_models import MODELS, choose_model  # load_models, 
+from api.utils.preprocessing import check_df, organize_input
 
 
 router = APIRouter(
@@ -16,6 +15,8 @@ router = APIRouter(
 )
 
 @router.post("/", response_model=PropulsionOutput, status_code=status.HTTP_201_CREATED)
+
+
 def predict(input_data: PropulsionInputFull):
     """path/endpoint operation function"""
     # Load model and preprocessor based on choose_model
@@ -27,9 +28,8 @@ def predict(input_data: PropulsionInputFull):
             status_code=418,  # I'm a teapot
             detail=model_type
         )
-    df = pd.DataFrame.from_dict(input_data, orient = 'index').T
-    print(df)
     the_model, the_preprocessor = MODELS[model_type]["model"], MODELS[model_type]["preprocessor"]
-    # result = the_model.predict(the_preprocessor.transform(input_data))
+    df = check_df(input_data=input_data)
+    df = organize_input(df, the_preprocessor)
     result = the_model.predict(the_preprocessor.transform(df))
     return result

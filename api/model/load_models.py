@@ -1,5 +1,5 @@
 import joblib # pyright: ignore[reportMissingImports]
-from pathlib import Path
+# from pathlib import Path
 from scripts.model.tuning import HyperParamSearch
 from scripts.data.feature_select import FeatureSelector
 from scripts.data.feature_engineer import FeatureEngineer
@@ -45,11 +45,11 @@ def load_models(model_path=MODEL_PATHS,
             print(f"Model {name} not found, continuing w/o it.")
 
     for name, path in preprocessor_path.items():
-        if path.exists():
+        if path.exists() and name in loaded_models:
             loaded_models[name]["preprocessor"] = joblib.load(path)
             print(f"loaded {name} preprocessor.")
         else:
-            print(f"Preprocessor {name} not found, continuing w/o it.")
+            print(f"Preprocessor {name} not loaded, continuing w/o it.")
 
 
 def choose_model(input_data,
