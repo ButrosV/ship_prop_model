@@ -227,9 +227,15 @@ python -m api.test_api --source_file data/custom_test_input.json
 ```bash
 rm -rf data/* models/*
 ```
+```powershell
+Remove-Item -Recurse -Force .\data\* , .\models\*
+```
 - To clean entire current root directory:
 ```bash
 rm -rf ./*
+```
+```powershell
+Remove-Item -Recurse -Force .\*
 ```
 
 ## Configuration
